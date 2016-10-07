@@ -1,8 +1,11 @@
 // 程序入口
-class GameMain{
+class Game{
     constructor()
-    {
-        Laya.init(600,400);
+    {        
+        Laya.init(1000,600);
+        var bg:BackGround = new BackGround();
+        Laya.stage.addChild(bg);
     }
+    
 }
-new GameMain();
+new Game();
