@@ -44,7 +44,7 @@ var Game = (function () {
     };
     Game.prototype.onMouseMove = function (e) {
         this.hero.pos(Laya.stage.mouseX, Laya.stage.mouseY);
-        console.log(Laya.stage.mouseX, Laya.stage.mouseY);
+        // console.log(Laya.stage.mouseX,Laya.stage.mouseY);
     };
     Game.prototype.createEnemy = function (num) {
         for (var i = 0; i < num; i++) {

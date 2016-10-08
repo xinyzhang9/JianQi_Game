@@ -32,8 +32,7 @@ class Role extends Laya.Sprite{
             'war/hero_down5.png','war/hero_down6.png','war/hero_down7.png','war/hero_down8.png','war/hero_down9.png'],'hero_down');
 
             //enemy1 down
-            Laya.Animation.createFrames(['war/enemy1_down1.png','war/enemy1_down2.png','war/enemy1_down3.png','war/enemy1_down4.png',
-            'war/enemy1_down5.png'],'enemy1_down');
+            Laya.Animation.createFrames(['war/enemy1_down1.png','war/enemy1_down2.png','war/enemy1_down3.png','war/enemy1_down4.png'],'enemy1_down');
             //enemy1 hit
             Laya.Animation.createFrames(['war/enemy1_hit1.png','war/enemy1_hit2.png'],'enemy1_hit');
             //enemy1 walk
@@ -41,7 +40,7 @@ class Role extends Laya.Sprite{
             'war/enemy1_walk5.png','war/enemy1_walk6.png'],'enemy1_walk');
 
             //enemy2 down
-            Laya.Animation.createFrames(['war/enemy2_down1.png','war/enemy2_down2.png','war/enemy2_down3.png','war/enemy2_down4.png'],'enemy2_down');
+            Laya.Animation.createFrames(['war/enemy2_down1.png','war/enemy2_down2.png','war/enemy2_down3.png','war/enemy2_down4.png','war/enemy2_down5.png'],'enemy2_down');
             //enemy2 hit
             Laya.Animation.createFrames(['war/enemy2_hit1.png','war/enemy2_hit2.png'],'enemy2_hit');
             //enemy2 walk
@@ -54,7 +53,8 @@ class Role extends Laya.Sprite{
             Laya.Animation.createFrames(['war/enemy3_hit1.png','war/enemy3_hit2.png'],'enemy3_hit');
             //enemy3 walk
             Laya.Animation.createFrames(['war/enemy3_walk1.png','war/enemy3_walk2.png','war/enemy3_walk3.png','war/enemy3_walk4.png',
-            'war/enemy3_walk5.png','war/enemy3_walk6.png','war/enemy3_walk7.png'],'enemy3_walk');
+            'war/enemy3_walk5.png','war/enemy3_walk6.png','war/enemy3_walk7.png','war/enemy3_walk8.png',
+            'war/enemy3_walk9.png','war/enemy3_walk10.png','war/enemy3_walk11.png','war/enemy3_walk12.png'],'enemy3_walk');
         }
         
         if(!this.body){
