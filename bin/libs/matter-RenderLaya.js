@@ -61,7 +61,7 @@ var LayaRender = {};
 
         var render = Common.extend(defaults, options);
 
-        render.canvas = laya.renders.Render.canvas;
+        render.canvas = laya.renders.Render.canvas.source;
         render.context = laya.renders.Render.context.ctx;
 
         render.textures = {};
@@ -126,7 +126,7 @@ var LayaRender = {};
     {
         var pixelRatio;
 		pixelRatio = 1;
-        Laya.Render.canvas.setAttribute('data-pixel-ratio', pixelRatio);
+        Laya.Render.canvas.source.setAttribute('data-pixel-ratio', pixelRatio);
     }
 
     /**
