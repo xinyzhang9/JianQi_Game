@@ -17,7 +17,8 @@ var Role = (function (_super) {
             'war/hero_walk12.png', 'war/hero_walk13.png', 'war/hero_walk14.png', 'war/hero_walk15.png',
             'war/hero_walk16.png', 'war/hero_walk17.png', 'war/hero_walk18.png', 'war/hero_walk19.png',
             'war/hero_walk20.png', 'war/hero_walk21.png', 'war/hero_walk22.png', 'war/hero_walk23.png', 'war/hero_walk24.png'], 'hero_walk');
-        Laya.Animation.createFrames(['war/hero_down1.png', 'war/hero_down2.png', 'war/hero_down3.png', 'war/hero_down4.png', 'war/hero_down5.png'], 'hero_down');
+        Laya.Animation.createFrames(['war/hero_down1.png', 'war/hero_down2.png', 'war/hero_down3.png', 'war/hero_down4.png',
+            'war/hero_down5.png', 'war/hero_down6.png', 'war/hero_down7.png', 'war/hero_down8.png', 'war/hero_down9.png'], 'hero_down');
         this.body = new Laya.Animation();
         // this.body.loadImages(['war/hero_walk1.png','war/hero_walk2.png','war/hero_walk3.png',
         // 'war/hero_walk4.png','war/hero_walk5.png','war/hero_walk6.png','war/hero_walk7.png',
