@@ -6,7 +6,14 @@ class Role extends Laya.Sprite{
     public camp: number;
     public hp: number;
     public speed: number;
-    public hitRadius: number;
+    public hitRadius: number = 0;
+
+    public shootType: number = 0;
+    public shootInterval: number = 500;
+    public shootTime: number = Laya.Browser.now()+2000;
+
+    public action: string;
+    public isBullet: boolean = false;
 
     constructor(){
         super();
@@ -55,16 +62,33 @@ class Role extends Laya.Sprite{
             Laya.Animation.createFrames(['war/enemy3_walk1.png','war/enemy3_walk2.png','war/enemy3_walk3.png','war/enemy3_walk4.png',
             'war/enemy3_walk5.png','war/enemy3_walk6.png','war/enemy3_walk7.png','war/enemy3_walk8.png',
             'war/enemy3_walk9.png','war/enemy3_walk10.png','war/enemy3_walk11.png','war/enemy3_walk12.png'],'enemy3_walk');
+
+            //bullet1 walk
+            Laya.Animation.createFrames(['war/bullet1_fly1.png','war/bullet1_fly2.png','war/bullet1_fly3.png'],'bullet1_walk');
         }
         
         if(!this.body){
             this.body = new Laya.Animation();
+            //set animation interval
+            this.body.interval = 50;
             this.addChild(this.body);
+
+            this.body.on('complete',this,this.onPlayComplete);
         }
         //play walk animations
         this.playAction('walk');
     }
+    onPlayComplete():void{
+        if(this.action === 'down'){
+            this.body.stop();
+            this.visible = false;
+        }else if(this.action === 'hit'){
+            this.playAction('fly');
+        }
+    }
     playAction(action: string):void{
+        //record current action
+        this.action = action;
         this.body.play(0,true,this.type + '_'+action);
         var bound: Laya.Rectangle = this.body.getBounds();
         this.body.pos(-bound.width/2,-bound.height/2);

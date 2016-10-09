@@ -7,6 +7,11 @@ var Role = (function (_super) {
     __extends(Role, _super);
     function Role() {
         _super.call(this);
+        this.hitRadius = 0;
+        this.shootType = 0;
+        this.shootInterval = 500;
+        this.shootTime = Laya.Browser.now() + 2000;
+        this.isBullet = false;
     }
     Role.prototype.init = function (type, camp, hp, speed, hitRadius) {
         //initialize attributes
@@ -49,15 +54,31 @@ var Role = (function (_super) {
             Laya.Animation.createFrames(['war/enemy3_walk1.png', 'war/enemy3_walk2.png', 'war/enemy3_walk3.png', 'war/enemy3_walk4.png',
                 'war/enemy3_walk5.png', 'war/enemy3_walk6.png', 'war/enemy3_walk7.png', 'war/enemy3_walk8.png',
                 'war/enemy3_walk9.png', 'war/enemy3_walk10.png', 'war/enemy3_walk11.png', 'war/enemy3_walk12.png'], 'enemy3_walk');
+            //bullet1 walk
+            Laya.Animation.createFrames(['war/bullet1_fly1.png', 'war/bullet1_fly2.png', 'war/bullet1_fly3.png'], 'bullet1_walk');
         }
         if (!this.body) {
             this.body = new Laya.Animation();
+            //set animation interval
+            this.body.interval = 50;
             this.addChild(this.body);
+            this.body.on('complete', this, this.onPlayComplete);
         }
         //play walk animations
         this.playAction('walk');
     };
+    Role.prototype.onPlayComplete = function () {
+        if (this.action === 'down') {
+            this.body.stop();
+            this.visible = false;
+        }
+        else if (this.action === 'hit') {
+            this.playAction('fly');
+        }
+    };
     Role.prototype.playAction = function (action) {
+        //record current action
+        this.action = action;
         this.body.play(0, true, this.type + '_' + action);
         var bound = this.body.getBounds();
         this.body.pos(-bound.width / 2, -bound.height / 2);
