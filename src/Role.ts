@@ -37,6 +37,8 @@ class Role extends Laya.Sprite{
             //hero down
             Laya.Animation.createFrames(['war/hero_down1.png','war/hero_down2.png','war/hero_down3.png','war/hero_down4.png',
             'war/hero_down5.png','war/hero_down6.png','war/hero_down7.png','war/hero_down8.png','war/hero_down9.png'],'hero_down');
+            //hero hit
+            Laya.Animation.createFrames(['war/hero_hit1.png','war/hero_hit2.png'],'hero_hit');
 
             //enemy1 down
             Laya.Animation.createFrames(['war/enemy1_down1.png','war/enemy1_down2.png','war/enemy1_down3.png','war/enemy1_down4.png'],'enemy1_down');
