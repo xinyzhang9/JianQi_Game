@@ -23,7 +23,12 @@ class GameInfo extends ui.GameInfoUI{
     }
 
     public hp(val: number):void{
-        this.hpLabel.text = 'HP: '+val;
+        // this.hpLabel.text = 'HP: '+val;
+        var str = '';
+        for(var i = 0; i < val; i++){
+            str += '\u2665';
+        }
+        this.hpLabel.text = 'HP: '+str;
     }
 
     public level(val: number):void{
@@ -32,5 +37,10 @@ class GameInfo extends ui.GameInfoUI{
 
     public score(val: number):void{
         this.scoreLabel.text = 'Score: '+val;
+    }
+
+    //best score
+    public bestScore(value: number): void{
+        this.bestScoreLabel.text = 'Best Score: ' + value;
     }
 }

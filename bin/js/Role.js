@@ -71,7 +71,7 @@ var Role = (function (_super) {
         if (!this.body) {
             this.body = new Laya.Animation();
             //set animation interval
-            this.body.interval = 50;
+            this.body.interval = 75;
             this.addChild(this.body);
             this.body.on('complete', this, this.onPlayComplete);
         }

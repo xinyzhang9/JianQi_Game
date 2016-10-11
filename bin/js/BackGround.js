@@ -11,10 +11,10 @@ var BackGround = (function (_super) {
     }
     BackGround.prototype.init = function () {
         this.bg1 = new Laya.Sprite();
-        this.bg1.loadImage('res/background.png');
+        this.bg1.loadImage('res/background.jpg');
         this.addChild(this.bg1);
         this.bg2 = new Laya.Sprite();
-        this.bg2.loadImage('res/background.png');
+        this.bg2.loadImage('res/background.jpg');
         this.bg2.pos(-1000, 0);
         this.addChild(this.bg2);
         Laya.timer.frameLoop(1, this, this.onLoop);

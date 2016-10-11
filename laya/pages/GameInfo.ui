@@ -2,8 +2,8 @@
     "x":0,
     "type":"View",
     "selectedBox":1,
-    "selecteID":2,
-    "props":{"width":600,"sceneColor":"#000000","height":400},
+    "selecteID":8,
+    "props":{"x":30,"width":600,"sceneColor":"#000000","height":400},
     "nodeParent":-1,
     "label":"View",
     "isOpen":true,
@@ -22,7 +22,7 @@
         {
             "x":15,
             "type":"Button",
-            "props":{"y":19,"x":495,"var":"pauseBtn","stateNum":"1","skin":"war/btn_pause.png"},
+            "props":{"y":550,"x":910,"var":"pauseBtn","stateNum":"1","skin":"war/btn_pause.png"},
             "nodeParent":1,
             "label":"Button(pauseBtn)",
             "isDirectory":false,
@@ -42,7 +42,7 @@
         {
             "x":15,
             "type":"Label",
-            "props":{"y":20,"x":150,"var":"levelLabel","text":"Level:50","styleSkin":"war/label.png","fontSize":20,"color":"#ffffff"},
+            "props":{"y":500,"x":"30","var":"levelLabel","text":"Level:50","styleSkin":"war/label.png","fontSize":20,"color":"#ffffff","bold":true},
             "nodeParent":1,
             "label":"Label(levelLabel)",
             "isDirectory":false,
@@ -57,12 +57,13 @@
                 }],
             "compId":3,
             "child":[
-                ]
+                ],
+            "$HIDDEN":true
         },
         {
             "x":15,
             "type":"Label",
-            "props":{"y":20,"x":70,"var":"hpLabel","text":"Hp:10","styleSkin":"war/label.png","fontSize":20,"color":"#3dff00"},
+            "props":{"y":20,"x":30,"var":"hpLabel","text":"Hp:10","styleSkin":"war/label.png","fontSize":20,"color":"#ff0000","bold":true},
             "nodeParent":1,
             "label":"Label(hpLabel)",
             "isDirectory":false,
@@ -82,7 +83,7 @@
         {
             "x":15,
             "type":"Label",
-            "props":{"y":20,"x":250,"var":"scoreLabel","text":"Score:100","styleSkin":"war/label.png","fontSize":20,"color":"#f4f41d"},
+            "props":{"y":50,"x":30,"var":"scoreLabel","text":"Score:100","styleSkin":"war/label.png","fontSize":20,"color":"#f4f41d","bold":true},
             "nodeParent":1,
             "label":"Label(scoreLabel)",
             "isDirectory":false,
@@ -102,7 +103,7 @@
         {
             "x":15,
             "type":"Label",
-            "props":{"y":260,"x":234,"var":"infoLabel","text":"Game Over!","styleSkin":"war/label.png","fontSize":28,"color":"#ffffff"},
+            "props":{"y":256,"x":350,"var":"infoLabel","text":"Game Over!","styleSkin":"war/label.png","fontSize":28,"color":"#ffffff"},
             "nodeParent":1,
             "label":"Label(infoLabel)",
             "isDirectory":false,
@@ -116,6 +117,46 @@
                     "__InPool":false
                 }],
             "compId":6,
+            "child":[
+                ]
+        },
+        {
+            "x":15,
+            "type":"Label",
+            "props":{"y":530,"x":30,"var":"bestScoreLabel","text":"Best Score","styleSkin":"war/label.png","fontSize":20,"color":"#27a300","bold":true},
+            "nodeParent":1,
+            "label":"Label(bestScoreLabel)",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "frames":[
+                {
+                    "type":1,
+                    "props":{"y":103,"x":300,"text":"label","styleSkin":"war/label.png"},
+                    "frame":0,
+                    "__InPool":false
+                }],
+            "compId":7,
+            "child":[
+                ]
+        },
+        {
+            "x":15,
+            "type":"Image",
+            "props":{"y":8,"x":-21,"skin":"war/logo.png"},
+            "nodeParent":1,
+            "label":"Image",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "frames":[
+                {
+                    "type":1,
+                    "props":{"y":159,"x":117,"skin":"war/logo.png"},
+                    "frame":0,
+                    "__InPool":false
+                }],
+            "compId":8,
             "child":[
                 ]
         }],

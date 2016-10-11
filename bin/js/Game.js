@@ -1,12 +1,15 @@
 // 程序入口
 var Game = (function () {
     function Game() {
-        this.bulletPos = [[0], [-10, 10], [-20, 0, 20], [-30, -10, 10, 30]];
+        this.bulletPos = [[0], [-10, 10], [-20, 0, 20]];
         this.level = 0;
         this.score = 0;
         this.levelUpScore = 10;
         this.bulletLevel = 0;
         this.radius = [15, 30, 70];
+        this.itemStartTime = 0;
+        this.paused = false;
+        this.bestScore = 0;
         Laya.init(1000, 600, Laya.WebGL);
         Laya.loader.load('res/atlas/war.json', Laya.Handler.create(this, this.onLoaded), null, Laya.Loader.ATLAS);
     }
@@ -27,24 +30,11 @@ var Game = (function () {
             if (role && role.speed) {
                 role.x -= role.speed;
                 //if enemy out of bound, remove it
-                if (role.x < 0 || !role.visible || (role.heroType === 1 && role.x > 1000)) {
+                if (role.x < 20 || !role.visible || (role.heroType === 1 && role.x > 1000)) {
                     role.removeSelf();
                     //recycle
                     role.visible = true;
                     Laya.Pool.recover('role', role);
-                }
-            }
-            if (role.shootType > 0) {
-                var time = Laya.Browser.now();
-                if (time > role.shootTime) {
-                    role.shootTime = time + role.shootInterval;
-                    var pos = this.bulletPos[role.shootType - 1];
-                    for (var index = 0; index < pos.length; index++) {
-                        var bullet = Laya.Pool.getItemByClass('role', Role);
-                        bullet.init('bullet1', role.camp, 1, -5 - role.shootType - Math.floor(this.level / 15), 1, 1);
-                        bullet.pos(role.x - role.hitRadius + 40, role.y + 25 + pos[index]);
-                        this.roleBox.addChild(bullet);
-                    }
                 }
             }
         }
@@ -78,9 +68,13 @@ var Game = (function () {
             }
         }
         if (this.hero.hp < 1) {
+            //update bestScore
+            if (this.score > this.bestScore) {
+                localStorage.setItem('bestScore', this.score.toString());
+            }
             this.gameInfo.hp(this.hero.hp);
             Laya.timer.clear(this, this.onLoop);
-            this.gameInfo.infoLabel.text = 'GameOver, Your score is ' + this.score + '\n Click here to restart.';
+            this.gameInfo.infoLabel.text = 'GameOver, Your score is ' + this.score + '\nClick here to restart.';
             this.gameInfo.infoLabel.once('click', this, this.restart);
         }
         var cutTime = this.level < 30 ? this.level * 2 : 60;
@@ -105,6 +99,15 @@ var Game = (function () {
         this.level = 0;
         this.levelUpScore = 10;
         this.bulletLevel = 0;
+        this.bestScore = 0;
+        if (localStorage.getItem('bestScore')) {
+            this.bestScore = parseInt(localStorage.getItem('bestScore'));
+            this.gameInfo.bestScore(this.bestScore);
+            console.log(localStorage.getItem('bestScore'));
+        }
+        else {
+            this.gameInfo.bestScore(0);
+        }
         this.gameInfo.reset();
         this.hero.init('hero', 0, 5, 0, 30);
         this.hero.pos(20, 300);
@@ -128,11 +131,12 @@ var Game = (function () {
     Game.prototype.resume = function () {
         Laya.timer.frameLoop(1, this, this.onLoop);
         Laya.stage.on('mousemove', this, this.onMouseMove);
+        Laya.stage.on(laya.events.Event.KEY_DOWN, this, this.onKeyDown);
     };
     Game.prototype.lostHp = function (role, lostHp) {
         //set hero shield time
         if (role == this.hero) {
-            console.log('shield:', this.hero.shield);
+            // console.log('shield:',this.hero.shield);
             this.gameInfo.hp(role.hp);
             if (!this.hero.shield) {
                 this.hero.shield = true;
@@ -148,7 +152,7 @@ var Game = (function () {
         if (role.heroType === 2) {
             this.bulletLevel++;
             // this.hero.shootType = Math.min(Math.floor(this.bulletLevel/2)+1,4);
-            this.hero.shootType = Math.min(this.bulletLevel, 4);
+            this.hero.shootType = Math.min(this.bulletLevel + 1, 3);
             this.hero.shootInterval = 500 - 20 * (this.bulletLevel > 20 ? 20 : this.bulletLevel);
             role.visible = false;
         }
@@ -172,9 +176,12 @@ var Game = (function () {
                 if (role.type === 'enemy3') {
                     var type = Math.random() < 0.6 ? 2 : 3;
                     var item = Laya.Pool.getItemByClass('role', Role);
-                    item.init('ufo' + (type - 1), role.camp, 1, 1, 15, type);
-                    item.pos(role.x, role.y);
-                    this.roleBox.addChild(item);
+                    if (Laya.Browser.now() - this.itemStartTime > 1000) {
+                        this.itemStartTime = Laya.Browser.now();
+                        item.init('ufo' + (type - 1), role.camp, 1, 1, 15, type);
+                        item.pos(role.x, role.y);
+                        this.roleBox.addChild(item);
+                    }
                 }
             }
         }
@@ -182,6 +189,36 @@ var Game = (function () {
     Game.prototype.onMouseMove = function (e) {
         this.hero.pos(Laya.stage.mouseX, Laya.stage.mouseY);
         // console.log(Laya.stage.mouseX,Laya.stage.mouseY);
+    };
+    Game.prototype.onKeyDown = function (e) {
+        if (e.keyCode === 27) {
+            if (this.paused == false) {
+                this.paused = true;
+                gameInstance.pause();
+                this.gameInfo.infoLabel.text = 'Game paused.\nPress ESC to resume';
+            }
+            else {
+                this.paused = false;
+                this.gameInfo.infoLabel.text = '';
+                gameInstance.resume();
+            }
+        }
+        if (e.keyCode === 83) {
+            //generate bullet
+            if (this.hero.shootType > 0) {
+                var time = Laya.Browser.now();
+                if (time > this.hero.shootTime) {
+                    this.hero.shootTime = time + this.hero.shootInterval;
+                    var pos = this.bulletPos[this.hero.shootType - 1];
+                    for (var index = 0; index < pos.length; index++) {
+                        var bullet = Laya.Pool.getItemByClass('role', Role);
+                        bullet.init('bullet1', this.hero.camp, 1, -5 - this.hero.shootType - Math.floor(this.level / 15), 1, 1);
+                        bullet.pos(this.hero.x - this.hero.hitRadius + 40, this.hero.y + 25 + pos[index]);
+                        this.roleBox.addChild(bullet);
+                    }
+                }
+            }
+        }
     };
     Game.prototype.createEnemy = function (type, num, speed, hp) {
         for (var i = 0; i < num; i++) {

@@ -27,13 +27,22 @@ var GameInfo = (function (_super) {
         gameInstance.resume();
     };
     GameInfo.prototype.hp = function (val) {
-        this.hpLabel.text = 'HP: ' + val;
+        // this.hpLabel.text = 'HP: '+val;
+        var str = '';
+        for (var i = 0; i < val; i++) {
+            str += '\u2665';
+        }
+        this.hpLabel.text = 'HP: ' + str;
     };
     GameInfo.prototype.level = function (val) {
         this.levelLabel.text = 'Level: ' + val;
     };
     GameInfo.prototype.score = function (val) {
         this.scoreLabel.text = 'Score: ' + val;
+    };
+    //best score
+    GameInfo.prototype.bestScore = function (value) {
+        this.bestScoreLabel.text = 'Best Score: ' + value;
     };
     return GameInfo;
 }(ui.GameInfoUI));
