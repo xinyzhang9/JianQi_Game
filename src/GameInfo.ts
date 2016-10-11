@@ -1,0 +1,36 @@
+class GameInfo extends ui.GameInfoUI{
+    constructor(){
+        super();
+        this.pauseBtn.on('click',this,this.onPauseBtnClick);
+        this.reset();
+    }
+
+    public reset():void{
+        this.infoLabel.text = '';
+        this.hp(5);
+        this.level(0);
+        this.score(0);
+    }
+    onPauseBtnClick(e:Laya.Event):void{
+        e.stopPropagation();
+        this.infoLabel.text = 'Game Paused. Click to resume.';
+        gameInstance.pause();
+        Laya.stage.once('click',this,this.onStageClick);
+    }
+    onStageClick(e:Laya.Event):void{
+        this.infoLabel.text = '';
+        gameInstance.resume();
+    }
+
+    public hp(val: number):void{
+        this.hpLabel.text = 'HP: '+val;
+    }
+
+    public level(val: number):void{
+        this.levelLabel.text = 'Level: '+val;
+    }
+
+    public score(val: number):void{
+        this.scoreLabel.text = 'Score: '+val;
+    }
+}

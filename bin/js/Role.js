@@ -10,16 +10,21 @@ var Role = (function (_super) {
         this.hitRadius = 0;
         this.shootType = 0;
         this.shootInterval = 500;
-        this.shootTime = Laya.Browser.now() + 2000;
-        this.isBullet = false;
+        this.shootTime = Laya.Browser.now() + 100;
+        //0: normal,1:bullet,2:bullet++,3:blood++
+        this.heroType = 0;
+        //shield status
+        this.shield = false;
     }
-    Role.prototype.init = function (type, camp, hp, speed, hitRadius) {
+    Role.prototype.init = function (type, camp, hp, speed, hitRadius, heroType) {
+        if (heroType === void 0) { heroType = 0; }
         //initialize attributes
         this.type = type;
         this.camp = camp;
         this.hp = hp;
         this.speed = speed;
         this.hitRadius = hitRadius;
+        this.heroType = heroType;
         //cache animations
         if (!Role.cached) {
             //hero walk
@@ -58,6 +63,10 @@ var Role = (function (_super) {
                 'war/enemy3_walk9.png', 'war/enemy3_walk10.png', 'war/enemy3_walk11.png', 'war/enemy3_walk12.png'], 'enemy3_walk');
             //bullet1 walk
             Laya.Animation.createFrames(['war/bullet1_fly1.png', 'war/bullet1_fly2.png', 'war/bullet1_fly3.png'], 'bullet1_walk');
+            //ufo1
+            Laya.Animation.createFrames(['war/ufo1.png'], 'ufo1_walk');
+            //ufo2
+            Laya.Animation.createFrames(['war/ufo2.png'], 'ufo2_walk');
         }
         if (!this.body) {
             this.body = new Laya.Animation();
@@ -75,7 +84,7 @@ var Role = (function (_super) {
             this.visible = false;
         }
         else if (this.action === 'hit') {
-            this.playAction('fly');
+            this.playAction('walk');
         }
     };
     Role.prototype.playAction = function (action) {

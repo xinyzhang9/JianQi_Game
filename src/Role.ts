@@ -10,21 +10,26 @@ class Role extends Laya.Sprite{
 
     public shootType: number = 0;
     public shootInterval: number = 500;
-    public shootTime: number = Laya.Browser.now()+2000;
+    public shootTime: number = Laya.Browser.now()+100;
 
     public action: string;
-    public isBullet: boolean = false;
+    //0: normal,1:bullet,2:bullet++,3:blood++
+    public heroType: number = 0;
+
+    //shield status
+    public shield: boolean = false;
 
     constructor(){
         super();
     }
-    public init(type: string, camp: number, hp: number, speed: number, hitRadius: number): void{
+    public init(type: string, camp: number, hp: number, speed: number, hitRadius: number, heroType: number = 0): void{
         //initialize attributes
         this.type = type;
         this.camp = camp;
         this.hp = hp;
         this.speed = speed;
         this.hitRadius = hitRadius;
+        this.heroType = heroType;
         //cache animations
         if(!Role.cached){
             //hero walk
@@ -67,6 +72,11 @@ class Role extends Laya.Sprite{
 
             //bullet1 walk
             Laya.Animation.createFrames(['war/bullet1_fly1.png','war/bullet1_fly2.png','war/bullet1_fly3.png'],'bullet1_walk');
+
+            //ufo1
+            Laya.Animation.createFrames(['war/ufo1.png'],'ufo1_walk');
+            //ufo2
+            Laya.Animation.createFrames(['war/ufo2.png'],'ufo2_walk');
         }
         
         if(!this.body){
@@ -85,7 +95,7 @@ class Role extends Laya.Sprite{
             this.body.stop();
             this.visible = false;
         }else if(this.action === 'hit'){
-            this.playAction('fly');
+            this.playAction('walk');
         }
     }
     playAction(action: string):void{
