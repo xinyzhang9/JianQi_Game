@@ -12,6 +12,9 @@ var Game = (function () {
         this.bestScore = 0;
         Laya.init(1000, 600, Laya.WebGL);
         Laya.loader.load('res/atlas/war.json', Laya.Handler.create(this, this.onLoaded), null, Laya.Loader.ATLAS);
+        Laya.loader.load([{ url: 'res/sound/achievement.mp3', type: 'sound' }, { url: 'res/sound/bullet.mp3', type: 'sound' }, { url: 'res/sound/enemy1_down.mp3', type: 'sound' },
+            { url: 'res/sound/enemy2_down.mp3', type: 'sound' }, { url: 'res/sound/enemy3_down.mp3', type: 'sound' }, { url: 'res/sound/enemy3_out.mp3', type: 'sound' },
+            { url: 'res/sound/gameover.mp3', type: 'sound' },]);
     }
     Game.prototype.onLoaded = function () {
         var bg = new BackGround();
@@ -68,6 +71,7 @@ var Game = (function () {
             }
         }
         if (this.hero.hp < 1) {
+            Laya.SoundManager.playSound('res/sound/gameover.mp3');
             //update bestScore
             if (this.score > this.bestScore) {
                 localStorage.setItem('bestScore', this.score.toString());
@@ -92,6 +96,7 @@ var Game = (function () {
         //boss
         if (Laya.timer.currFrame % (900 - cutTime * 4) === 0) {
             this.createEnemy(2, 1, 1 + speedUp, 10 + hpUp * 6);
+            Laya.SoundManager.playSound('res/sound/enemy3_out.mp3');
         }
     };
     Game.prototype.restart = function () {
@@ -155,6 +160,7 @@ var Game = (function () {
             this.hero.shootType = Math.min(this.bulletLevel + 1, 3);
             this.hero.shootInterval = 500 - 20 * (this.bulletLevel > 20 ? 20 : this.bulletLevel);
             role.visible = false;
+            Laya.SoundManager.playSound('res/sound/achievement.mp3');
         }
         else if (role.heroType === 3) {
             this.hero.hp++;
@@ -162,6 +168,7 @@ var Game = (function () {
                 this.hero.hp = 10;
             this.gameInfo.hp(this.hero.hp);
             role.visible = false;
+            Laya.SoundManager.playSound('res/sound/achievement.mp3');
         }
         else if (role.hp > 0) {
             role.playAction('hit');
@@ -171,6 +178,7 @@ var Game = (function () {
                 role.visible = false;
             }
             else {
+                Laya.SoundManager.playSound('res/sound/' + role.type + '_down.mp3');
                 role.playAction('down');
                 //beat boss to get items
                 if (role.type === 'enemy3') {
@@ -216,6 +224,7 @@ var Game = (function () {
                         bullet.pos(this.hero.x - this.hero.hitRadius + 40, this.hero.y + 25 + pos[index]);
                         this.roleBox.addChild(bullet);
                     }
+                    Laya.SoundManager.playSound('res/sound/bullet.mp3');
                 }
             }
         }
