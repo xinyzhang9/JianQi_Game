@@ -2,7 +2,7 @@
     "x":0,
     "type":"View",
     "selectedBox":1,
-    "selecteID":6,
+    "selecteID":13,
     "props":{"x":30,"width":600,"sceneColor":"#000000","height":400},
     "nodeParent":-1,
     "label":"View",
@@ -83,7 +83,7 @@
         {
             "x":15,
             "type":"Label",
-            "props":{"y":50,"x":30,"var":"scoreLabel","text":"Score:100","styleSkin":"war/label.png","fontSize":20,"color":"#f4f41d","bold":true},
+            "props":{"y":530,"x":30,"var":"scoreLabel","text":"Score:100","styleSkin":"war/label.png","fontSize":20,"color":"#f4f41d","bold":true},
             "nodeParent":1,
             "label":"Label(scoreLabel)",
             "isDirectory":false,
@@ -103,7 +103,7 @@
         {
             "x":15,
             "type":"Label",
-            "props":{"y":256,"x":300,"var":"infoLabel","text":"Game Over!","styleSkin":"war/label.png","fontSize":28,"color":"#ffffff"},
+            "props":{"y":256,"x":300,"var":"infoLabel","text":"Game Over!","styleSkin":"war/label.png","fontSize":28,"color":"#970200"},
             "nodeParent":1,
             "label":"Label(infoLabel)",
             "isDirectory":false,
@@ -123,7 +123,7 @@
         {
             "x":15,
             "type":"Label",
-            "props":{"y":530,"x":30,"var":"bestScoreLabel","text":"Best Score","styleSkin":"war/label.png","fontSize":20,"color":"#27a300","bold":true},
+            "props":{"y":560,"x":30,"var":"bestScoreLabel","text":"Best Score","styleSkin":"war/label.png","fontSize":20,"color":"#27a300","bold":true},
             "nodeParent":1,
             "label":"Label(bestScoreLabel)",
             "isDirectory":false,
@@ -142,8 +142,49 @@
         },
         {
             "x":15,
+            "type":"Label",
+            "props":{"y":366,"x":300,"width":25.353515625,"var":"tutorialLabel","text":"Tutorial","styleSkin":"war/label.png","height":12,"fontSize":25,"color":"#ffffff"},
+            "nodeParent":1,
+            "label":"Label(tutorialLabel)",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "frames":[
+                {
+                    "type":1,
+                    "props":{"y":366,"x":338,"text":"label","styleSkin":"war/label.png"},
+                    "frame":0,
+                    "__InPool":false
+                }],
+            "compId":9,
+            "child":[
+                ],
+            "$HIDDEN":true
+        },
+        {
+            "x":15,
+            "type":"Label",
+            "props":{"y":50,"x":30,"var":"mpLabel","text":"MP: 100","styleSkin":"war/label.png","fontSize":20,"color":"#0038ec","bold":true},
+            "nodeParent":1,
+            "label":"Label(mpLabel)",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "frames":[
+                {
+                    "type":1,
+                    "props":{"y":322,"x":47,"text":"label","styleSkin":"war/label.png"},
+                    "frame":0,
+                    "__InPool":false
+                }],
+            "compId":11,
+            "child":[
+                ]
+        },
+        {
+            "x":15,
             "type":"Image",
-            "props":{"y":8,"x":-21,"skin":"war/logo.png"},
+            "props":{"y":17,"x":-12,"width":30,"skin":"war/hp.png","height":22},
             "nodeParent":1,
             "label":"Image",
             "isDirectory":false,
@@ -152,11 +193,31 @@
             "frames":[
                 {
                     "type":1,
-                    "props":{"y":159,"x":117,"skin":"war/logo.png"},
+                    "props":{"y":211,"x":57,"skin":"war/hp.png"},
                     "frame":0,
                     "__InPool":false
                 }],
-            "compId":8,
+            "compId":13,
+            "child":[
+                ]
+        },
+        {
+            "x":15,
+            "type":"Image",
+            "props":{"y":44,"x":-12,"width":26,"skin":"war/mp.png","height":35},
+            "nodeParent":1,
+            "label":"Image",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "frames":[
+                {
+                    "type":1,
+                    "props":{"y":337,"x":199,"skin":"war/mp.png"},
+                    "frame":0,
+                    "__InPool":false
+                }],
+            "compId":14,
             "child":[
                 ]
         }],

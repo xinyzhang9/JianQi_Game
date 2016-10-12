@@ -7,7 +7,9 @@ class GameInfo extends ui.GameInfoUI{
 
     public reset():void{
         this.infoLabel.text = '';
+        this.tutorialLabel.text = '';
         this.hp(5);
+        this.mp(0);
         this.level(0);
         this.score(0);
     }
@@ -27,8 +29,18 @@ class GameInfo extends ui.GameInfoUI{
         var str = '';
         for(var i = 0; i < val; i++){
             str += '\u2665';
+            // str += '|';
         }
-        this.hpLabel.text = 'HP: '+str;
+        this.hpLabel.text = str;
+    }
+
+    public mp(val: number):void{
+        // this.hpLabel.text = 'HP: '+val;
+        var str = '';
+        for(var i = 0; i < val; i++){
+            str += '|';
+        }
+        this.mpLabel.text = str;
     }
 
     public level(val: number):void{
@@ -43,4 +55,5 @@ class GameInfo extends ui.GameInfoUI{
     public bestScore(value: number): void{
         this.bestScoreLabel.text = 'Best Score: ' + value;
     }
+
 }

@@ -12,7 +12,9 @@ var GameInfo = (function (_super) {
     }
     GameInfo.prototype.reset = function () {
         this.infoLabel.text = '';
+        this.tutorialLabel.text = '';
         this.hp(5);
+        this.mp(0);
         this.level(0);
         this.score(0);
     };
@@ -32,7 +34,15 @@ var GameInfo = (function (_super) {
         for (var i = 0; i < val; i++) {
             str += '\u2665';
         }
-        this.hpLabel.text = 'HP: ' + str;
+        this.hpLabel.text = str;
+    };
+    GameInfo.prototype.mp = function (val) {
+        // this.hpLabel.text = 'HP: '+val;
+        var str = '';
+        for (var i = 0; i < val; i++) {
+            str += '|';
+        }
+        this.mpLabel.text = str;
     };
     GameInfo.prototype.level = function (val) {
         this.levelLabel.text = 'Level: ' + val;

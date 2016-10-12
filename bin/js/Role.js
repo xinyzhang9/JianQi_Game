@@ -7,6 +7,7 @@ var Role = (function (_super) {
     __extends(Role, _super);
     function Role() {
         _super.call(this);
+        this.mp = 0;
         this.hitRadius = 0;
         this.shootType = 0;
         this.shootInterval = 500;

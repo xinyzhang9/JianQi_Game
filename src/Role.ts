@@ -5,6 +5,7 @@ class Role extends Laya.Sprite{
     //0:hero, 1:enemy
     public camp: number;
     public hp: number;
+    public mp: number = 0;
     public speed: number;
     public hitRadius: number = 0;
 

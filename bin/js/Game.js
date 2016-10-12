@@ -10,6 +10,7 @@ var Game = (function () {
         this.shieldStartTime = 0;
         this.itemStartTime = 0;
         this.soundStartTime = 0;
+        this.mpStartTime = 0;
         this.paused = false;
         this.bestScore = 0;
         Laya.init(1000, 600, Laya.WebGL);
@@ -33,6 +34,19 @@ var Game = (function () {
         this.restart();
     };
     Game.prototype.onLoop = function () {
+        //update mp
+        if (Laya.Browser.now() - this.mpStartTime > 1000 - this.level * 15) {
+            this.mpStartTime = Laya.Browser.now();
+            this.hero.mp += 1;
+            // if(this.hero.mp >=5){
+            //     this.gameInfo.tutorialLabel.text = 'Press A to release Sword Trap';
+            // }else if(this.hero.mp >= 10){
+            //     this.gameInfo.tutorialLabel.text = 'Press D to release Sword Soul';
+            // }
+            if (this.hero.mp > 10)
+                this.hero.mp = 10;
+            this.gameInfo.mp(this.hero.mp);
+        }
         for (var i = this.roleBox.numChildren - 1; i > -1; i--) {
             var role = this.roleBox.getChildAt(i);
             if (role && role.speed) {
@@ -79,6 +93,9 @@ var Game = (function () {
                         this.gameInfo.score(this.score);
                         if (this.score > this.levelUpScore) {
                             this.level++;
+                            if (this.level > 60) {
+                                this.level = 60;
+                            }
                             //display
                             this.gameInfo.level(this.level);
                             this.levelUpScore += this.level * 5;
@@ -95,7 +112,7 @@ var Game = (function () {
             }
             this.gameInfo.hp(this.hero.hp);
             Laya.timer.clear(this, this.onLoop);
-            this.gameInfo.infoLabel.text = 'GameOver, Your score is ' + this.score + '\nClick here to restart.';
+            this.gameInfo.infoLabel.text = 'Gameover, Your score is ' + this.score + '\nClick here to restart.';
             this.gameInfo.infoLabel.once('click', this, this.restart);
         }
         var cutTime = this.level < 30 ? this.level * 2 : 60;
@@ -130,6 +147,7 @@ var Game = (function () {
             this.gameInfo.bestScore(0);
         }
         this.gameInfo.reset();
+        this.gameInfo.tutorialLabel.text = 'S: Sword Wave, requires 0 mp\nA: Sword Trap, requires 5 mp\nD: Sword Soul, requires 10 mp\nESC: Pause Game';
         this.hero.init('hero', 0, 5, 0, 30);
         this.hero.pos(20, 300);
         this.hero.shootType = 1;
@@ -213,15 +231,18 @@ var Game = (function () {
             if (this.paused == false) {
                 this.paused = true;
                 gameInstance.pause();
-                this.gameInfo.infoLabel.text = 'Game paused.\nPress ESC to resume';
+                this.gameInfo.infoLabel.text = 'Game paused\nPress ESC to resume';
+                this.gameInfo.tutorialLabel.text = 'S: Sword Wave, requires 0 mp\nA: Sword Trap, requires 5 mp\nD: Sword Soul, requires 10 mp\nESC: Pause Game';
             }
             else {
                 this.paused = false;
                 this.gameInfo.infoLabel.text = '';
+                this.gameInfo.tutorialLabel.text = '';
                 gameInstance.resume();
             }
         }
         if (e.keyCode === 83) {
+            this.gameInfo.tutorialLabel.text = '';
             //generate bullet1
             if (this.hero.shootType > 0) {
                 var time = Laya.Browser.now();
@@ -239,8 +260,11 @@ var Game = (function () {
             }
         }
         if (e.keyCode === 68) {
+            this.gameInfo.tutorialLabel.text = '';
             //generate bullet3
-            if (this.hero.shootType > 0) {
+            if (this.hero.shootType > 0 && this.hero.mp === 10) {
+                this.hero.mp = 0;
+                this.gameInfo.mp(this.hero.mp);
                 var time = Laya.Browser.now();
                 if (time > this.hero.shootTime) {
                     this.hero.shootTime = time + this.hero.shootInterval;
@@ -256,8 +280,11 @@ var Game = (function () {
             }
         }
         if (e.keyCode === 65) {
+            this.gameInfo.tutorialLabel.text = '';
             //generate bullet4
-            if (this.hero.shootType > 0) {
+            if (this.hero.shootType > 0 && this.hero.mp >= 5) {
+                this.hero.mp -= 5;
+                this.gameInfo.mp(this.hero.mp);
                 var time = Laya.Browser.now();
                 if (time > this.hero.shootTime) {
                     this.hero.shootTime = time + this.hero.shootInterval;
