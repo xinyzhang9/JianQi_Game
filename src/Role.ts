@@ -13,7 +13,7 @@ class Role extends Laya.Sprite{
     public shootTime: number = Laya.Browser.now()+100;
 
     public action: string;
-    //0: normal,1:bullet,2:bullet++,3:blood++
+    //0: normal,1:bullet,2:bullet++,3:blood++,4:special move
     public heroType: number = 0;
 
     //shield status
@@ -77,6 +77,17 @@ class Role extends Laya.Sprite{
             Laya.Animation.createFrames(['war/bullet3_fly2.png','war/bullet3_fly3.png',
             'war/bullet3_fly4.png','war/bullet3_fly5.png','war/bullet3_fly6.png','war/bullet3_fly7.png'],'bullet3_walk');
 
+            //bullet4 walk
+            Laya.Animation.createFrames(['war/bullet4_fly1.png','war/bullet4_fly2.png','war/bullet4_fly3.png',
+            'war/bullet4_fly4.png','war/bullet4_fly5.png','war/bullet4_fly6.png','war/bullet4_fly7.png',
+            'war/bullet4_fly8.png','war/bullet4_fly9.png','war/bullet4_fly10.png'],'bullet4_walk');
+
+            //bullet4 release
+            Laya.Animation.createFrames(['war/bullet4_release1.png','war/bullet4_release2.png','war/bullet4_release3.png',
+            'war/bullet4_release4.png','war/bullet4_release5.png','war/bullet4_release6.png','war/bullet4_release7.png',
+            'war/bullet4_release8.png','war/bullet4_release9.png','war/bullet4_release10.png','war/bullet4_release11.png',
+            'war/bullet4_release12.png'],'bullet4_release');
+
             //ufo1
             Laya.Animation.createFrames(['war/ufo1.png'],'ufo1_walk');
             //ufo2
@@ -91,8 +102,12 @@ class Role extends Laya.Sprite{
 
             this.body.on('complete',this,this.onPlayComplete);
         }
-        //play walk animations
-        this.playAction('walk');
+        if(this.heroType === 4){
+            this.playAction('release');
+        }else{
+            this.playAction('walk');
+        }
+        
     }
     onPlayComplete():void{
         if(this.action === 'down'){
@@ -100,12 +115,21 @@ class Role extends Laya.Sprite{
             this.visible = false;
         }else if(this.action === 'hit'){
             this.playAction('walk');
+        }else if(this.action === 'release'){
+            this.playAction('walk');
         }
     }
     playAction(action: string):void{
         //record current action
         this.action = action;
         this.body.play(0,true,this.type + '_'+action);
+        var bound: Laya.Rectangle = this.body.getBounds();
+        this.body.pos(-bound.width/2,-bound.height/2);
+    }
+    playActionOnce(action: string):void{
+        //record current action
+        this.action = action;
+        this.body.play(0,false,this.type + '_'+action);
         var bound: Laya.Rectangle = this.body.getBounds();
         this.body.pos(-bound.width/2,-bound.height/2);
     }

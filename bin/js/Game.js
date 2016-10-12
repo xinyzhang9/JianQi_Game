@@ -255,6 +255,23 @@ var Game = (function () {
                 }
             }
         }
+        if (e.keyCode === 65) {
+            //generate bullet4
+            if (this.hero.shootType > 0) {
+                var time = Laya.Browser.now();
+                if (time > this.hero.shootTime) {
+                    this.hero.shootTime = time + this.hero.shootInterval;
+                    var pos = this.bulletPos[this.hero.shootType - 1];
+                    for (var index = 0; index < pos.length; index++) {
+                        var bullet = Laya.Pool.getItemByClass('role', Role);
+                        bullet.init('bullet4', this.hero.camp, 100, 0, 70, 4);
+                        bullet.pos(this.hero.x + 250, this.hero.y + 40);
+                        this.roleBox.addChild(bullet);
+                    }
+                    Laya.SoundManager.playSound('res/sound/bullet.mp3');
+                }
+            }
+        }
     };
     Game.prototype.createEnemy = function (type, num, speed, hp) {
         for (var i = 0; i < num; i++) {

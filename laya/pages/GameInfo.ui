@@ -2,7 +2,7 @@
     "x":0,
     "type":"View",
     "selectedBox":1,
-    "selecteID":8,
+    "selecteID":6,
     "props":{"x":30,"width":600,"sceneColor":"#000000","height":400},
     "nodeParent":-1,
     "label":"View",
@@ -103,7 +103,7 @@
         {
             "x":15,
             "type":"Label",
-            "props":{"y":256,"x":350,"var":"infoLabel","text":"Game Over!","styleSkin":"war/label.png","fontSize":28,"color":"#ffffff"},
+            "props":{"y":256,"x":300,"var":"infoLabel","text":"Game Over!","styleSkin":"war/label.png","fontSize":28,"color":"#ffffff"},
             "nodeParent":1,
             "label":"Label(infoLabel)",
             "isDirectory":false,
