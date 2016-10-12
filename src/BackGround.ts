@@ -7,11 +7,11 @@ class BackGround extends Laya.Sprite{
     }
     init():void{
         this.bg1 = new Laya.Sprite();
-        this.bg1.loadImage('res/background.jpg');
+        this.bg1.loadImage('res/background.png');
         this.addChild(this.bg1);
 
         this.bg2 = new Laya.Sprite();
-        this.bg2.loadImage('res/background.jpg');
+        this.bg2.loadImage('res/background.png');
         this.bg2.pos(-1000,0);
         this.addChild(this.bg2);
 

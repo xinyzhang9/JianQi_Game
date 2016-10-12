@@ -15,9 +15,13 @@ class Game{
 
     private itemStartTime: number = 0;
 
+    private soundStartTime: number = 0;
+
     private paused: boolean = false;
 
     private bestScore: number = 0;
+
+    
 
     constructor()
     {        
@@ -27,6 +31,9 @@ class Game{
         Laya.loader.load([{url:'res/sound/achievement.mp3',type:'sound'},{url:'res/sound/bullet.mp3',type:'sound'},{url:'res/sound/enemy1_down.mp3',type:'sound'},
         {url:'res/sound/enemy2_down.mp3',type:'sound'},{url:'res/sound/enemy3_down.mp3',type:'sound'},{url:'res/sound/enemy3_out.mp3',type:'sound'},
         {url:'res/sound/gameover.mp3',type:'sound'},]) 
+        Laya.stage.scaleMode = 'fixwidth';
+        Laya.stage.alignH = 'center';
+        Laya.stage.screenMode = 'horizontal';
     }
     onLoaded(){
         var bg:BackGround = new BackGround();
@@ -197,7 +204,11 @@ class Game{
             if(role.heroType > 0){
                 role.visible = false;
             }else{
-                Laya.SoundManager.playSound('res/sound/'+role.type+'_down.mp3');
+                if(Laya.Browser.now()-this.soundStartTime > 500){
+                    Laya.SoundManager.playSound('res/sound/'+role.type+'_die.mp3');
+                    this.soundStartTime = Laya.Browser.now();
+                }
+                
                 role.playAction('down');
                 //beat boss to get items
                 if(role.type === 'enemy3'){
@@ -235,7 +246,7 @@ class Game{
 
         }
         if(e.keyCode === 83){
-            //generate bullet
+            //generate bullet1
             if(this.hero.shootType > 0){
                 var time: number = Laya.Browser.now();
                 if(time > this.hero.shootTime){
@@ -246,6 +257,24 @@ class Game{
                         var bullet = Laya.Pool.getItemByClass('role',Role);
                         bullet.init('bullet1',this.hero.camp,1,-5-this.hero.shootType-Math.floor(this.level/15),1,1);
                         bullet.pos(this.hero.x-this.hero.hitRadius+40,this.hero.y+25 + pos[index]);
+                        this.roleBox.addChild(bullet);
+                    }
+                    Laya.SoundManager.playSound('res/sound/bullet.mp3');
+                }
+            }
+        }
+        if(e.keyCode === 68){
+            //generate bullet3
+            if(this.hero.shootType > 0){
+                var time: number = Laya.Browser.now();
+                if(time > this.hero.shootTime){
+                    this.hero.shootTime = time + this.hero.shootInterval;
+
+                    var pos: Array<number> = this.bulletPos[this.hero.shootType-1];
+                    for(var index: number = 0; index < pos.length; index++){
+                        var bullet = Laya.Pool.getItemByClass('role',Role);
+                        bullet.init('bullet3',this.hero.camp,100,-5,50,1);
+                        bullet.pos(this.hero.x+100,this.hero.y+20);
                         this.roleBox.addChild(bullet);
                     }
                     Laya.SoundManager.playSound('res/sound/bullet.mp3');

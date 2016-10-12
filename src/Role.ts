@@ -73,6 +73,10 @@ class Role extends Laya.Sprite{
             //bullet1 walk
             Laya.Animation.createFrames(['war/bullet1_fly1.png','war/bullet1_fly2.png','war/bullet1_fly3.png'],'bullet1_walk');
 
+            //bullet3 walk
+            Laya.Animation.createFrames(['war/bullet3_fly2.png','war/bullet3_fly3.png',
+            'war/bullet3_fly4.png','war/bullet3_fly5.png','war/bullet3_fly6.png','war/bullet3_fly7.png'],'bullet3_walk');
+
             //ufo1
             Laya.Animation.createFrames(['war/ufo1.png'],'ufo1_walk');
             //ufo2
