@@ -11,7 +11,7 @@ class Game{
     private roleBox: Laya.Sprite;
     private gameInfo: GameInfo;
 
-    private shieldStartTime: number;
+    private shieldStartTime: number = 0;
 
     private itemStartTime: number = 0;
 
@@ -60,7 +60,7 @@ class Game{
 
         //collision detect
         var n: number = this.roleBox.numChildren;
-        for(var i: number = this.roleBox.numChildren-1; i > 0; i--){
+        for(var i: number = this.roleBox.numChildren-1; i > -1; i--){
             var role1:Role = this.roleBox.getChildAt(i) as Role;
             if(role.hp < 1) continue;
             for(var j: number = i-1; j > -1; j--){
@@ -69,9 +69,20 @@ class Game{
                 if(role2.hp > 0 && role1.camp != role2.camp){
                     var hitRadius: number = role1.hitRadius + role2.hitRadius;
                     if(Math.abs(role1.x-role2.x) < hitRadius && Math.abs(role1.y-role2.y) < hitRadius){
+                        
+                        if(role1.heroType === 0 && role2.heroType === 0 && !this.hero.shield){
+                            this.shieldStartTime = Laya.Browser.now();
+                            console.log(this.shieldStartTime);
+                            this.hero.shield = true;
+                        }else if(role1.heroType === 0 && role2.heroType === 0 && this.hero.shield){
+                            if(Laya.Browser.now() - this.shieldStartTime > 500){
+                                this.hero.shield = false;
+                            }else{
+                                return;
+                            } 
+                        }
                         this.lostHp(role1,1);
                         this.lostHp(role2,1);
-                        console.log(this.hero.hp);
                         this.score++;
                         //display
                         this.gameInfo.score(this.score);
@@ -80,7 +91,6 @@ class Game{
                             //display
                             this.gameInfo.level(this.level);
                             this.levelUpScore += this.level * 5;
-                            
                         }
                     }
                 }
@@ -128,7 +138,6 @@ class Game{
         if(localStorage.getItem('bestScore')){
             this.bestScore = parseInt(localStorage.getItem('bestScore'));
             this.gameInfo.bestScore(this.bestScore);
-            console.log(localStorage.getItem('bestScore'));
         }else{
             this.gameInfo.bestScore(0);
         }
@@ -162,21 +171,12 @@ class Game{
         Laya.stage.on(laya.events.Event.KEY_DOWN,this,this.onKeyDown);
     }
 
-    lostHp(role: Role, lostHp: number): void{
-        //set hero shield time
-        if(role == this.hero){
-            // console.log('shield:',this.hero.shield);
-            this.gameInfo.hp(role.hp);
-            if(!this.hero.shield){
-                this.hero.shield = true;
-                this.shieldStartTime = Laya.Browser.now();
-            }
-            if(Laya.Browser.now() - this.shieldStartTime > 500){
-                this.hero.shield = false;
-            }
-        }
-        if((role == this.hero && !this.hero.shield ) || role != this.hero){
-             role.hp -= lostHp;
+    lostHp(role: Role, lostHp: number): void{  
+        role.hp -= lostHp;
+        //display hero 
+        if(role === this.hero){
+            this.gameInfo.hp(this.hero.hp);
+            console.log(this.hero.hp);
         }
         if(role.heroType === 2){
             this.bulletLevel++;
@@ -186,7 +186,7 @@ class Game{
             role.visible = false;
             Laya.SoundManager.playSound('res/sound/achievement.mp3');
         }else if(role.heroType === 3){
-            this.hero.hp ++;
+            this.hero.hp++;
             if(this.hero.hp > 10) this.hero.hp = 10;
             this.gameInfo.hp(this.hero.hp);
             role.visible = false;

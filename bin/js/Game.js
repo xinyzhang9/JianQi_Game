@@ -7,6 +7,7 @@ var Game = (function () {
         this.levelUpScore = 10;
         this.bulletLevel = 0;
         this.radius = [15, 30, 70];
+        this.shieldStartTime = 0;
         this.itemStartTime = 0;
         this.paused = false;
         this.bestScore = 0;
@@ -43,7 +44,7 @@ var Game = (function () {
         }
         //collision detect
         var n = this.roleBox.numChildren;
-        for (var i = this.roleBox.numChildren - 1; i > 0; i--) {
+        for (var i = this.roleBox.numChildren - 1; i > -1; i--) {
             var role1 = this.roleBox.getChildAt(i);
             if (role.hp < 1)
                 continue;
@@ -54,9 +55,21 @@ var Game = (function () {
                 if (role2.hp > 0 && role1.camp != role2.camp) {
                     var hitRadius = role1.hitRadius + role2.hitRadius;
                     if (Math.abs(role1.x - role2.x) < hitRadius && Math.abs(role1.y - role2.y) < hitRadius) {
+                        if (role1.heroType === 0 && role2.heroType === 0 && !this.hero.shield) {
+                            this.shieldStartTime = Laya.Browser.now();
+                            console.log(this.shieldStartTime);
+                            this.hero.shield = true;
+                        }
+                        else if (role1.heroType === 0 && role2.heroType === 0 && this.hero.shield) {
+                            if (Laya.Browser.now() - this.shieldStartTime > 500) {
+                                this.hero.shield = false;
+                            }
+                            else {
+                                return;
+                            }
+                        }
                         this.lostHp(role1, 1);
                         this.lostHp(role2, 1);
-                        console.log(this.hero.hp);
                         this.score++;
                         //display
                         this.gameInfo.score(this.score);
@@ -108,7 +121,6 @@ var Game = (function () {
         if (localStorage.getItem('bestScore')) {
             this.bestScore = parseInt(localStorage.getItem('bestScore'));
             this.gameInfo.bestScore(this.bestScore);
-            console.log(localStorage.getItem('bestScore'));
         }
         else {
             this.gameInfo.bestScore(0);
@@ -139,20 +151,11 @@ var Game = (function () {
         Laya.stage.on(laya.events.Event.KEY_DOWN, this, this.onKeyDown);
     };
     Game.prototype.lostHp = function (role, lostHp) {
-        //set hero shield time
-        if (role == this.hero) {
-            // console.log('shield:',this.hero.shield);
-            this.gameInfo.hp(role.hp);
-            if (!this.hero.shield) {
-                this.hero.shield = true;
-                this.shieldStartTime = Laya.Browser.now();
-            }
-            if (Laya.Browser.now() - this.shieldStartTime > 500) {
-                this.hero.shield = false;
-            }
-        }
-        if ((role == this.hero && !this.hero.shield) || role != this.hero) {
-            role.hp -= lostHp;
+        role.hp -= lostHp;
+        //display hero 
+        if (role === this.hero) {
+            this.gameInfo.hp(this.hero.hp);
+            console.log(this.hero.hp);
         }
         if (role.heroType === 2) {
             this.bulletLevel++;
