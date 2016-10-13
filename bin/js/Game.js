@@ -13,6 +13,7 @@ var Game = (function () {
         this.mpStartTime = 0;
         this.paused = false;
         this.bestScore = 0;
+        this.keyPressed = {};
         Laya.init(1000, 600, Laya.WebGL);
         Laya.loader.load('res/atlas/war.json', Laya.Handler.create(this, this.onLoaded), null, Laya.Loader.ATLAS);
         Laya.loader.load([{ url: 'res/sound/achievement.mp3', type: 'sound' }, { url: 'res/sound/bullet.mp3', type: 'sound' }, { url: 'res/sound/enemy1_down.mp3', type: 'sound' },
@@ -55,6 +56,62 @@ var Game = (function () {
                     role.visible = true;
                     Laya.Pool.recover('role', role);
                 }
+            }
+        }
+        //keypressed
+        console.log(this.keyPressed);
+        if (this.keyPressed[65]) {
+            this.gameInfo.tutorialLabel.text = '';
+            //generate bullet4              
+            var time = Laya.Browser.now();
+            if (time > this.hero.shootTime && this.hero.shootType > 0 && this.hero.mp >= 5) {
+                this.hero.mp -= 5;
+                this.gameInfo.mp(this.hero.mp);
+                this.hero.shootTime = time + this.hero.shootInterval;
+                var pos = this.bulletPos[this.hero.shootType - 1];
+                for (var index = 0; index < pos.length; index++) {
+                    var bullet = Laya.Pool.getItemByClass('role', Role);
+                    bullet.init('bullet4', this.hero.camp, 100, 0, 70, 4);
+                    bullet.pos(this.hero.x + 250, this.hero.y + 40);
+                    this.roleBox.addChild(bullet);
+                }
+                Laya.SoundManager.playSound('res/sound/bullet.mp3');
+            }
+        }
+        if (this.keyPressed[83]) {
+            this.gameInfo.tutorialLabel.text = '';
+            //generate bullet1
+            if (this.hero.shootType > 0) {
+                var time = Laya.Browser.now();
+                if (time > this.hero.shootTime) {
+                    this.hero.shootTime = time + this.hero.shootInterval;
+                    var pos = this.bulletPos[this.hero.shootType - 1];
+                    for (var index = 0; index < pos.length; index++) {
+                        var bullet = Laya.Pool.getItemByClass('role', Role);
+                        bullet.init('bullet1', this.hero.camp, 1, -5 - this.hero.shootType - Math.floor(this.level / 15), 1, 1);
+                        bullet.pos(this.hero.x - this.hero.hitRadius + 40, this.hero.y + 25 + pos[index]);
+                        this.roleBox.addChild(bullet);
+                    }
+                    Laya.SoundManager.playSound('res/sound/bullet.mp3');
+                }
+            }
+        }
+        if (this.keyPressed[68]) {
+            this.gameInfo.tutorialLabel.text = '';
+            //generate bullet3
+            var time = Laya.Browser.now();
+            if (time > this.hero.shootTime && this.hero.shootType > 0 && this.hero.mp === 10) {
+                this.hero.mp = 0;
+                this.gameInfo.mp(this.hero.mp);
+                this.hero.shootTime = time + this.hero.shootInterval;
+                var pos = this.bulletPos[this.hero.shootType - 1];
+                for (var index = 0; index < pos.length; index++) {
+                    var bullet = Laya.Pool.getItemByClass('role', Role);
+                    bullet.init('bullet3', this.hero.camp, 100, -5, 50, 1);
+                    bullet.pos(this.hero.x + 100, this.hero.y + 20);
+                    this.roleBox.addChild(bullet);
+                }
+                Laya.SoundManager.playSound('res/sound/bullet.mp3');
             }
         }
         //collision detect
@@ -168,6 +225,8 @@ var Game = (function () {
         Laya.timer.frameLoop(1, this, this.onLoop);
         Laya.stage.on('mousemove', this, this.onMouseMove);
         Laya.stage.on(laya.events.Event.KEY_DOWN, this, this.onKeyDown);
+        Laya.stage.on(laya.events.Event.KEY_UP, this, this.onKeyUp);
+        Laya.stage.on('click', this, this.onMouseClick);
     };
     Game.prototype.lostHp = function (role, lostHp) {
         role.hp -= lostHp;
@@ -223,7 +282,26 @@ var Game = (function () {
         this.hero.pos(Laya.stage.mouseX, Laya.stage.mouseY);
         // console.log(Laya.stage.mouseX,Laya.stage.mouseY);
     };
+    Game.prototype.onMouseClick = function (e) {
+        this.gameInfo.tutorialLabel.text = '';
+        //generate bullet1
+        if (this.hero.shootType > 0) {
+            var time = Laya.Browser.now();
+            if (time > this.hero.shootTime) {
+                this.hero.shootTime = time + this.hero.shootInterval;
+                var pos = this.bulletPos[this.hero.shootType - 1];
+                for (var index = 0; index < pos.length; index++) {
+                    var bullet = Laya.Pool.getItemByClass('role', Role);
+                    bullet.init('bullet1', this.hero.camp, 1, -5 - this.hero.shootType - Math.floor(this.level / 15), 1, 1);
+                    bullet.pos(this.hero.x - this.hero.hitRadius + 40, this.hero.y + 25 + pos[index]);
+                    this.roleBox.addChild(bullet);
+                }
+                Laya.SoundManager.playSound('res/sound/bullet.mp3');
+            }
+        }
+    };
     Game.prototype.onKeyDown = function (e) {
+        this.keyPressed[e.keyCode] = true;
         if (e.keyCode === 27) {
             if (this.paused == false) {
                 this.paused = true;
@@ -238,64 +316,9 @@ var Game = (function () {
                 gameInstance.resume();
             }
         }
-        if (e.keyCode === 83) {
-            this.gameInfo.tutorialLabel.text = '';
-            //generate bullet1
-            if (this.hero.shootType > 0) {
-                var time = Laya.Browser.now();
-                if (time > this.hero.shootTime) {
-                    this.hero.shootTime = time + this.hero.shootInterval;
-                    var pos = this.bulletPos[this.hero.shootType - 1];
-                    for (var index = 0; index < pos.length; index++) {
-                        var bullet = Laya.Pool.getItemByClass('role', Role);
-                        bullet.init('bullet1', this.hero.camp, 1, -5 - this.hero.shootType - Math.floor(this.level / 15), 1, 1);
-                        bullet.pos(this.hero.x - this.hero.hitRadius + 40, this.hero.y + 25 + pos[index]);
-                        this.roleBox.addChild(bullet);
-                    }
-                    Laya.SoundManager.playSound('res/sound/bullet.mp3');
-                }
-            }
-        }
-        if (e.keyCode === 68) {
-            this.gameInfo.tutorialLabel.text = '';
-            //generate bullet3
-            if (this.hero.shootType > 0 && this.hero.mp === 10) {
-                this.hero.mp = 0;
-                this.gameInfo.mp(this.hero.mp);
-                var time = Laya.Browser.now();
-                if (time > this.hero.shootTime) {
-                    this.hero.shootTime = time + this.hero.shootInterval;
-                    var pos = this.bulletPos[this.hero.shootType - 1];
-                    for (var index = 0; index < pos.length; index++) {
-                        var bullet = Laya.Pool.getItemByClass('role', Role);
-                        bullet.init('bullet3', this.hero.camp, 100, -5, 50, 1);
-                        bullet.pos(this.hero.x + 100, this.hero.y + 20);
-                        this.roleBox.addChild(bullet);
-                    }
-                    Laya.SoundManager.playSound('res/sound/bullet.mp3');
-                }
-            }
-        }
-        if (e.keyCode === 65) {
-            this.gameInfo.tutorialLabel.text = '';
-            //generate bullet4
-            if (this.hero.shootType > 0 && this.hero.mp >= 5) {
-                this.hero.mp -= 5;
-                this.gameInfo.mp(this.hero.mp);
-                var time = Laya.Browser.now();
-                if (time > this.hero.shootTime) {
-                    this.hero.shootTime = time + this.hero.shootInterval;
-                    var pos = this.bulletPos[this.hero.shootType - 1];
-                    for (var index = 0; index < pos.length; index++) {
-                        var bullet = Laya.Pool.getItemByClass('role', Role);
-                        bullet.init('bullet4', this.hero.camp, 100, 0, 70, 4);
-                        bullet.pos(this.hero.x + 250, this.hero.y + 40);
-                        this.roleBox.addChild(bullet);
-                    }
-                    Laya.SoundManager.playSound('res/sound/bullet.mp3');
-                }
-            }
-        }
+    };
+    Game.prototype.onKeyUp = function (e) {
+        this.keyPressed[e.keyCode] = false;
     };
     Game.prototype.createEnemy = function (type, num, speed, hp) {
         for (var i = 0; i < num; i++) {

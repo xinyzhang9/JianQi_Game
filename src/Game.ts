@@ -23,10 +23,12 @@ class Game{
 
     private bestScore: number = 0;
 
+    private keyPressed = {};
+
     
 
     constructor()
-    {        
+    {   
         Laya.init(1000,600,Laya.WebGL);
     
         Laya.loader.load('res/atlas/war.json',Laya.Handler.create(this,this.onLoaded),null,Laya.Loader.ATLAS);
@@ -77,6 +79,67 @@ class Game{
                 }
             }
         }
+        //keypressed
+        // console.log(this.keyPressed);
+        if(this.keyPressed[65]){
+            this.gameInfo.tutorialLabel.text = '';
+            //generate bullet4              
+            var time: number = Laya.Browser.now();
+            if(time > this.hero.shootTime && this.hero.shootType > 0 && this.hero.mp >=5){
+                this.hero.mp -= 5;
+                this.gameInfo.mp(this.hero.mp);
+                this.hero.shootTime = time + this.hero.shootInterval;
+
+                var pos: Array<number> = this.bulletPos[this.hero.shootType-1];
+                for(var index: number = 0; index < pos.length; index++){
+                    var bullet = Laya.Pool.getItemByClass('role',Role);
+                    bullet.init('bullet4',this.hero.camp,100,0,70,4);
+                    bullet.pos(this.hero.x+250,this.hero.y+40);
+                    this.roleBox.addChild(bullet);
+                }
+                Laya.SoundManager.playSound('res/sound/bullet.mp3');
+            }
+            
+        }
+        if(this.keyPressed[83]){
+            this.gameInfo.tutorialLabel.text = '';
+            //generate bullet1
+            if(this.hero.shootType > 0){
+                var time: number = Laya.Browser.now();
+                if(time > this.hero.shootTime){
+                    this.hero.shootTime = time + this.hero.shootInterval;
+
+                    var pos: Array<number> = this.bulletPos[this.hero.shootType-1];
+                    for(var index: number = 0; index < pos.length; index++){
+                        var bullet = Laya.Pool.getItemByClass('role',Role);
+                        bullet.init('bullet1',this.hero.camp,1,-5-this.hero.shootType-Math.floor(this.level/15),1,1);
+                        bullet.pos(this.hero.x-this.hero.hitRadius+40,this.hero.y+25 + pos[index]);
+                        this.roleBox.addChild(bullet);
+                    }
+                    Laya.SoundManager.playSound('res/sound/bullet.mp3');
+                }
+            }
+        }
+        if(this.keyPressed[68]){
+            this.gameInfo.tutorialLabel.text = '';
+            //generate bullet3
+            var time: number = Laya.Browser.now();
+            if(time > this.hero.shootTime && this.hero.shootType > 0 && this.hero.mp === 10){
+                this.hero.mp = 0;
+                this.gameInfo.mp(this.hero.mp);       
+                this.hero.shootTime = time + this.hero.shootInterval;
+
+                var pos: Array<number> = this.bulletPos[this.hero.shootType-1];
+                for(var index: number = 0; index < pos.length; index++){
+                    var bullet = Laya.Pool.getItemByClass('role',Role);
+                    bullet.init('bullet3',this.hero.camp,100,-5,50,1);
+                    bullet.pos(this.hero.x+100,this.hero.y+20);
+                    this.roleBox.addChild(bullet);
+                }
+                Laya.SoundManager.playSound('res/sound/bullet.mp3');
+            }
+        }
+        
 
         //collision detect
         var n: number = this.roleBox.numChildren;
@@ -92,7 +155,7 @@ class Game{
                         
                         if(role1.heroType === 0 && role2.heroType === 0 && !this.hero.shield){
                             this.shieldStartTime = Laya.Browser.now();
-                            console.log(this.shieldStartTime);
+                            // console.log(this.shieldStartTime);
                             this.hero.shield = true;
                         }else if(role1.heroType === 0 && role2.heroType === 0 && this.hero.shield){
                             if(Laya.Browser.now() - this.shieldStartTime > 500){
@@ -192,6 +255,8 @@ class Game{
         Laya.timer.frameLoop(1,this,this.onLoop);
         Laya.stage.on('mousemove',this,this.onMouseMove);
         Laya.stage.on(laya.events.Event.KEY_DOWN,this,this.onKeyDown);
+        Laya.stage.on(laya.events.Event.KEY_UP,this,this.onKeyUp);
+        Laya.stage.on('click',this,this.onMouseClick);
     }
 
     lostHp(role: Role, lostHp: number): void{  
@@ -199,7 +264,7 @@ class Game{
         //display hero 
         if(role === this.hero){
             this.gameInfo.hp(this.hero.hp);
-            console.log(this.hero.hp);
+            // console.log(this.hero.hp);
         }
         if(role.heroType === 2){
             this.bulletLevel++;
@@ -247,25 +312,9 @@ class Game{
         // console.log(Laya.stage.mouseX,Laya.stage.mouseY);
 
     }
-    onKeyDown(e): void{
-        if(e.keyCode === 27){
-            if(this.paused == false){
-                this.paused = true;
-                gameInstance.pause();
-                this.gameInfo.infoLabel.text = 'Game paused\nPress ESC to resume';
-                this.gameInfo.tutorialLabel.text = 'S: Sword Wave, requires 0 mp\nA: Sword Trap, requires 5 mp\nD: Sword Soul, requires 10 mp\nESC: Pause Game';
 
-            }    
-            else{
-                this.paused = false;
-                this.gameInfo.infoLabel.text = '';
-                this.gameInfo.tutorialLabel.text = '';
-                gameInstance.resume();
-            }
-
-        }
-        if(e.keyCode === 83){
-            this.gameInfo.tutorialLabel.text = '';
+    onMouseClick(e:Laya.Event):void{
+        this.gameInfo.tutorialLabel.text = '';
             //generate bullet1
             if(this.hero.shootType > 0){
                 var time: number = Laya.Browser.now();
@@ -282,49 +331,28 @@ class Game{
                     Laya.SoundManager.playSound('res/sound/bullet.mp3');
                 }
             }
-        }
-        if(e.keyCode === 68){
-            this.gameInfo.tutorialLabel.text = '';
-            //generate bullet3
-            if(this.hero.shootType > 0 && this.hero.mp === 10){
-                this.hero.mp = 0;
-                this.gameInfo.mp(this.hero.mp);
-                var time: number = Laya.Browser.now();
-                if(time > this.hero.shootTime){
-                    this.hero.shootTime = time + this.hero.shootInterval;
+    }
+    onKeyDown(e): void{
+        this.keyPressed[e.keyCode] = true;
+        if(e.keyCode === 27){
+            if(this.paused == false){
+                this.paused = true;
+                gameInstance.pause();
+                this.gameInfo.infoLabel.text = 'Game paused\nPress ESC to resume';
+                this.gameInfo.tutorialLabel.text = 'S: Sword Wave, requires 0 mp\nA: Sword Trap, requires 5 mp\nD: Sword Soul, requires 10 mp\nESC: Pause Game';
 
-                    var pos: Array<number> = this.bulletPos[this.hero.shootType-1];
-                    for(var index: number = 0; index < pos.length; index++){
-                        var bullet = Laya.Pool.getItemByClass('role',Role);
-                        bullet.init('bullet3',this.hero.camp,100,-5,50,1);
-                        bullet.pos(this.hero.x+100,this.hero.y+20);
-                        this.roleBox.addChild(bullet);
-                    }
-                    Laya.SoundManager.playSound('res/sound/bullet.mp3');
-                }
+            }    
+            else{
+                this.paused = false;
+                this.gameInfo.infoLabel.text = '';
+                this.gameInfo.tutorialLabel.text = '';
+                gameInstance.resume();
             }
-        }
-        if(e.keyCode === 65){
-            this.gameInfo.tutorialLabel.text = '';
-            //generate bullet4
-            if(this.hero.shootType > 0 && this.hero.mp >=5){
-                this.hero.mp -= 5;
-                this.gameInfo.mp(this.hero.mp);
-                var time: number = Laya.Browser.now();
-                if(time > this.hero.shootTime){
-                    this.hero.shootTime = time + this.hero.shootInterval;
 
-                    var pos: Array<number> = this.bulletPos[this.hero.shootType-1];
-                    for(var index: number = 0; index < pos.length; index++){
-                        var bullet = Laya.Pool.getItemByClass('role',Role);
-                        bullet.init('bullet4',this.hero.camp,100,0,70,4);
-                        bullet.pos(this.hero.x+250,this.hero.y+40);
-                        this.roleBox.addChild(bullet);
-                    }
-                    Laya.SoundManager.playSound('res/sound/bullet.mp3');
-                }
-            }
         }
+    }
+    onKeyUp(e:Laya.Event):void{
+        this.keyPressed[e.keyCode] = false;
     }
 
     createEnemy(type: number, num: number, speed: number, hp: number):void{
