@@ -3,9 +3,9 @@ This is a 2D endless mode arcade game. You are a hero who keeps fighting various
 During game process, you can get items to power up your health and skills. 
 To get higher score, you need to beat as many enemies as you could. 
 But at first, make sure you can survive.  
-## live
+## Live
 https://xinyzhang9.github.io/jianqi/bin/index.html
-## features
+## Features
 - [x] Endless mode: enemies are generated automatically based on your current difficulty level
 - [x] Level upgrade: level upgrades when your score is high enough to make the game more challenging.
 - [x] Super moves: your MP is accumulated by time. When it is half-full or full, you can release supermoves to clear enemies.
@@ -16,7 +16,7 @@ https://xinyzhang9.github.io/jianqi/bin/index.html
 - [ ] make UI more attractive
 - [ ] migrate to mobile version  
 
-## get it run locally
+## Get it run locally
 ```
 clone or download this repo
 cd [path to this repo]
@@ -24,13 +24,13 @@ cd [path to this repo]
 python -m SimpleHTTPServer 8000
 open your browser at localhost:8000/bin/index.html
 ```
-## game instructions
-'S': Sword Wave, requires 0 MP    
-'A': Sword Trap, requires 5 MP  
-'D': Sword Soul, requries 10 MP  
-'ESC': Pause/Resume game  
+## Game instructions
+S: Sword Wave, requires 0 MP    
+A: Sword Trap, requires 5 MP  
+D: Sword Soul, requries 10 MP  
+ESC: Pause/Resume game  
 
-## screenshots
+## Screenshots
 ![alt tag](https://raw.githubusercontent.com/xinyzhang9/JianQi_Game/master/screen.png)
 ![alt tag](https://raw.githubusercontent.com/xinyzhang9/JianQi_Game/master/screen2.png)
 
