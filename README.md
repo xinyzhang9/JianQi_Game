@@ -32,5 +32,6 @@ open your browser at localhost:8000/bin/index.html
 
 ## screenshots
 ![alt tag](https://raw.githubusercontent.com/xinyzhang9/JianQi_Game/master/screen.png)
+![alt tag](https://raw.githubusercontent.com/xinyzhang9/JianQi_Game/master/screen2.png)
 
 
