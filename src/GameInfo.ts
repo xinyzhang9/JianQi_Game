@@ -1,7 +1,6 @@
 class GameInfo extends ui.GameInfoUI{
     constructor(){
         super();
-        this.pauseBtn.on('click',this,this.onPauseBtnClick);
         this.reset();
     }
 
@@ -12,12 +11,6 @@ class GameInfo extends ui.GameInfoUI{
         this.mp(0);
         this.level(0);
         this.score(0);
-    }
-    onPauseBtnClick(e:Laya.Event):void{
-        e.stopPropagation();
-        this.infoLabel.text = 'Game Paused. Click to resume.';
-        gameInstance.pause();
-        Laya.stage.once('click',this,this.onStageClick);
     }
     onStageClick(e:Laya.Event):void{
         this.infoLabel.text = '';

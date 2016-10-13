@@ -7,7 +7,6 @@ var GameInfo = (function (_super) {
     __extends(GameInfo, _super);
     function GameInfo() {
         _super.call(this);
-        this.pauseBtn.on('click', this, this.onPauseBtnClick);
         this.reset();
     }
     GameInfo.prototype.reset = function () {
@@ -17,12 +16,6 @@ var GameInfo = (function (_super) {
         this.mp(0);
         this.level(0);
         this.score(0);
-    };
-    GameInfo.prototype.onPauseBtnClick = function (e) {
-        e.stopPropagation();
-        this.infoLabel.text = 'Game Paused. Click to resume.';
-        gameInstance.pause();
-        Laya.stage.once('click', this, this.onStageClick);
     };
     GameInfo.prototype.onStageClick = function (e) {
         this.infoLabel.text = '';

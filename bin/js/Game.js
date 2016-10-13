@@ -38,13 +38,10 @@ var Game = (function () {
         if (Laya.Browser.now() - this.mpStartTime > 1000 - this.level * 15) {
             this.mpStartTime = Laya.Browser.now();
             this.hero.mp += 1;
-            // if(this.hero.mp >=5){
-            //     this.gameInfo.tutorialLabel.text = 'Press A to release Sword Trap';
-            // }else if(this.hero.mp >= 10){
-            //     this.gameInfo.tutorialLabel.text = 'Press D to release Sword Soul';
-            // }
-            if (this.hero.mp > 10)
+            if (this.hero.mp >= 10) {
                 this.hero.mp = 10;
+                this.gameInfo.tutorialLabel.text = 'Your MP is full!';
+            }
             this.gameInfo.mp(this.hero.mp);
         }
         for (var i = this.roleBox.numChildren - 1; i > -1; i--) {
