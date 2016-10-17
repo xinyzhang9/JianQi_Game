@@ -30,6 +30,10 @@ A: Sword Trap, requires 5 MP
 D: Sword Soul, requries 10 MP  
 ESC: Pause/Resume game  
 
+## Tips
+#### Since the game difficulty is growing as you kill more enemies. Sometiems you can avoid battle and choose the boss to kill, which gives you item to level up your attacking abilities. After your attacking skill is 3(max), you can survive longer in the comming battles.
+#### Use A and D to kill boss, don't waste your MP.
+
 ## Screenshots
 ![alt tag](https://raw.githubusercontent.com/xinyzhang9/JianQi_Game/master/screen.png)
 ![alt tag](https://raw.githubusercontent.com/xinyzhang9/JianQi_Game/master/screen2.png)
