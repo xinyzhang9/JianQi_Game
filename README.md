@@ -25,9 +25,9 @@ python -m SimpleHTTPServer 8000
 open your browser at localhost:8000/bin/index.html
 ```
 ## Game instructions
-S: Sword Wave, requires 0 MP    
-A: Sword Trap, requires 5 MP  
-D: Sword Soul, requries 10 MP  
+S: Sword Wave(普通攻击), requires 0 MP    
+A: Sword Trap（剑阵陷阱）, requires 5 MP  
+D: Sword Soul（剑气穿心）, requries 10 MP  
 ESC: Pause/Resume game  
 
 ## Tips
