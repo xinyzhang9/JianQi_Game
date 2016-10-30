@@ -18,7 +18,7 @@ var Game = (function () {
         Laya.loader.load('res/atlas/war.json', Laya.Handler.create(this, this.onLoaded), null, Laya.Loader.ATLAS);
         Laya.loader.load([{ url: 'res/sound/achievement.mp3', type: 'sound' }, { url: 'res/sound/bullet.mp3', type: 'sound' }, { url: 'res/sound/enemy1_down.mp3', type: 'sound' },
             { url: 'res/sound/enemy2_down.mp3', type: 'sound' }, { url: 'res/sound/enemy3_down.mp3', type: 'sound' }, { url: 'res/sound/enemy3_out.mp3', type: 'sound' },
-            { url: 'res/sound/gameover.mp3', type: 'sound' },]);
+            { url: 'res/sound/gameover.mp3', type: 'sound' }, { url: 'res/sound/bgm.mp3', type: 'sound' },]);
         Laya.stage.scaleMode = 'fixwidth';
         Laya.stage.alignH = 'center';
         Laya.stage.screenMode = 'horizontal';
@@ -32,6 +32,7 @@ var Game = (function () {
         Laya.stage.addChild(this.gameInfo);
         this.hero = new Role();
         this.roleBox.addChild(this.hero);
+        Laya.SoundManager.playMusic('res/sound/bgm.mp3', 0);
         this.restart();
     };
     Game.prototype.onLoop = function () {
@@ -59,7 +60,7 @@ var Game = (function () {
             }
         }
         //keypressed
-        console.log(this.keyPressed);
+        // console.log(this.keyPressed);
         if (this.keyPressed[65]) {
             this.gameInfo.tutorialLabel.text = '';
             //generate bullet4              
@@ -129,7 +130,7 @@ var Game = (function () {
                     if (Math.abs(role1.x - role2.x) < hitRadius && Math.abs(role1.y - role2.y) < hitRadius) {
                         if (role1.heroType === 0 && role2.heroType === 0 && !this.hero.shield) {
                             this.shieldStartTime = Laya.Browser.now();
-                            console.log(this.shieldStartTime);
+                            // console.log(this.shieldStartTime);
                             this.hero.shield = true;
                         }
                         else if (role1.heroType === 0 && role2.heroType === 0 && this.hero.shield) {
@@ -233,7 +234,6 @@ var Game = (function () {
         //display hero 
         if (role === this.hero) {
             this.gameInfo.hp(this.hero.hp);
-            console.log(this.hero.hp);
         }
         if (role.heroType === 2) {
             this.bulletLevel++;

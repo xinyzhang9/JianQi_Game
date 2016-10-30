@@ -34,7 +34,7 @@ class Game{
         Laya.loader.load('res/atlas/war.json',Laya.Handler.create(this,this.onLoaded),null,Laya.Loader.ATLAS);
         Laya.loader.load([{url:'res/sound/achievement.mp3',type:'sound'},{url:'res/sound/bullet.mp3',type:'sound'},{url:'res/sound/enemy1_down.mp3',type:'sound'},
         {url:'res/sound/enemy2_down.mp3',type:'sound'},{url:'res/sound/enemy3_down.mp3',type:'sound'},{url:'res/sound/enemy3_out.mp3',type:'sound'},
-        {url:'res/sound/gameover.mp3',type:'sound'},]) 
+        {url:'res/sound/gameover.mp3',type:'sound'},{url:'res/sound/bgm.mp3',type:'sound'},]) 
         Laya.stage.scaleMode = 'fixwidth';
         Laya.stage.alignH = 'center';
         Laya.stage.screenMode = 'horizontal';
@@ -50,6 +50,7 @@ class Game{
 
         this.hero = new Role();
         this.roleBox.addChild(this.hero);
+        Laya.SoundManager.playMusic('res/sound/bgm.mp3',0);
         
         this.restart();
     }
